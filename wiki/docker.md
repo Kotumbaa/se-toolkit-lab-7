@@ -2,12 +2,12 @@
 
 <h2>Table of contents</h2>
 
+- [What is `Docker`](#what-is-docker)
 - [Image](#image)
 - [Container](#container)
   - [Why containers are useful](#why-containers-are-useful)
   - [Containers and host](#containers-and-host)
   - [Container ID](#container-id)
-- [What is `Docker`](#what-is-docker)
 - [Set up `Docker`](#set-up-docker)
   - [Install `Docker`](#install-docker)
   - [Start `Docker`](#start-docker)
@@ -21,6 +21,14 @@
 - [`Docker Compose`](#docker-compose)
 - [`DockerHub`](#dockerhub)
   - [`<your-dockerhub-username>`](#your-dockerhub-username)
+
+## What is `Docker`
+
+`Docker` is a platform for building and running [containers](#container).
+
+Docs:
+
+- [What is Docker?](https://docs.docker.com/get-started/docker-overview/)
 
 ## Image
 
@@ -64,13 +72,7 @@ A container is an isolated runtime for an application and its dependencies.
 
 ### Container ID
 
-## What is `Docker`
-
-`Docker` is a platform for building and running [containers](#container).
-
-Docs:
-
-- [What is Docker?](https://docs.docker.com/get-started/docker-overview/)
+<!-- TODO -->
 
 ## Set up `Docker`
 
@@ -78,7 +80,7 @@ Complete these steps:
 
 1. [Install `Docker`](#install-docker).
 2. [Start `Docker`](#start-docker).
-3. [Clean up `Docker`](#clean-up-docker)
+3. [Clean up `Docker`](#clean-up-docker).
 
 ### Install `Docker`
 
@@ -122,7 +124,7 @@ If you installed `Docker Desktop`:
    Total reclaimed space: ...
    ```
 
-3. To delete unused volumes,
+3. To delete unused [volumes](./docker-compose.md#volume),
 
    [run in the `VS Code Terminal`](./vs-code.md#run-a-command-in-the-vs-code-terminal):
 
@@ -166,9 +168,7 @@ docker run --name <container-name> -p <host-port>:<container-port> <image-name>
 
 ## `Docker Compose`
 
-`Docker Compose` runs multi-container apps from a `docker-compose.yml` file.
-
-See [`Docker Compose`](./docker-compose.md) for the full list of commands.
+[`Docker Compose`](./docker-compose.md#what-is-docker-compose) runs multi-[container](#container) apps from a `docker-compose.yml` file.
 
 ## `DockerHub`
 
