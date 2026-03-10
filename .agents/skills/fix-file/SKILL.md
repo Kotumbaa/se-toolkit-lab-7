@@ -1,23 +1,25 @@
 ---
 name: fix-file
 description: Fix convention violations found by /review-file
-argument-hint: "<path>"
+argument-hint: "[path]"
 ---
 
 Fix convention violations in a file using the report produced by `/review-file`.
 
 ## Steps
 
-1. Parse `$ARGUMENTS` to get the file path. Accept:
-   - Paths under `lab/tasks/` (e.g., `lab/tasks/setup.md`, `lab/tasks/required/task-2.md`)
-   - Paths under `wiki/` (e.g., `wiki/web-development.md`)
-   - Paths under `contributing/conventions/` (e.g., `contributing/conventions/writing/common.md`)
-   - The repository root `AGENTS.md` file
-   If the path is missing or does not match one of these patterns, ask the user.
+1. Determine the file path and whether **single-fix mode** is active:
+   - If the user has selected text from a report file in the IDE (a file under `instructors/file-reviews/`), activate **single-fix mode**: record the selected finding text, and derive the target file path by stripping the `instructors/file-reviews/` prefix from the IDE file path (e.g., `instructors/file-reviews/lab/tasks/required/task-1.md` → `lab/tasks/required/task-1.md`). `$ARGUMENTS` is not required in this case.
+   - Otherwise, parse `$ARGUMENTS` to get the file path. Accept:
+     - Paths under `lab/tasks/` (e.g., `lab/tasks/setup.md`, `lab/tasks/required/task-2.md`)
+     - Paths under `wiki/` (e.g., `wiki/web-development.md`)
+     - Paths under `contributing/conventions/` (e.g., `contributing/conventions/writing/common.md`)
+     - The repository root `AGENTS.md` file
+     If the path is missing or does not match one of these patterns, ask the user.
 2. Derive the report path: `instructors/file-reviews/<repo-root-path>`, where `<repo-root-path>` is the target file's path from the repository root (e.g., `instructors/file-reviews/lab/tasks/required/task-1.md` for `lab/tasks/required/task-1.md`, `instructors/file-reviews/wiki/web-development.md` for `wiki/web-development.md`). If the report file does not exist, tell the user to run `/review-file <path>` first and stop.
-3. Read the report file.
-4. Read the target file.
-5. Read the convention files referenced in the report header so every fix is grounded in the actual convention text:
+4. Read the report file.
+5. Read the target file.
+6. Read the convention files referenced in the report header so every fix is grounded in the actual convention text:
    - **For `lab/tasks/` files:**
      - [`contributing/conventions/writing/common.md`](../../../contributing/conventions/writing/common.md)
      - [`contributing/conventions/writing/tasks.md`](../../../contributing/conventions/writing/tasks.md)
@@ -30,14 +32,15 @@ Fix convention violations in a file using the report produced by `/review-file`.
      - [`contributing/conventions/conventions.md`](../../../contributing/conventions/conventions.md)
    - **For `AGENTS.md`:**
      - [`contributing/conventions/agents/agents.md`](../../../contributing/conventions/agents/agents.md)
-6. **Conceptual findings** cannot be auto-fixed — they require content decisions that only the author can make. List them all as skipped in the summary.
-7. Work through the report **Convention findings** one group at a time. For each violation, apply the minimal edit that resolves it. Use line numbers from the report as a starting guide, but always verify against the current file content (earlier fixes may shift lines).
-8. Work through the report **Empty sections**. For each empty section that has no `<!-- TODO ... -->` marker, add `<!-- TODO fill in this section -->` directly below the heading. Empty sections that already contain a `<!-- TODO ... -->` cannot be auto-fixed — skip them and note them in the summary.
-9. **TODOs** cannot be auto-fixed — they require content that only the author can supply. List them all as skipped in the summary.
-10. **Update the report file.** For each numbered finding in the report, prepend a status marker to the line:
+7. **If single-fix mode is active:** locate the selected finding in the report by matching its text. Apply only that one finding — follow the same rules as steps 8–11 below but scoped to that single item. Skip the finding (with a note) if it is Conceptual or a TODO. Then go directly to step 12.
+8. **Conceptual findings** cannot be auto-fixed — they require content decisions that only the author can make. List them all as skipped in the summary.
+9. Work through the report **Convention findings** one group at a time. For each violation, apply the minimal edit that resolves it. Use line numbers from the report as a starting guide, but always verify against the current file content (earlier fixes may shift lines).
+10. Work through the report **Empty sections**. For each empty section that has no `<!-- TODO ... -->` marker, add `<!-- TODO fill in this section -->` directly below the heading. Empty sections that already contain a `<!-- TODO ... -->` cannot be auto-fixed — skip them and note them in the summary.
+11. **TODOs** cannot be auto-fixed — they require content that only the author can supply. List them all as skipped in the summary.
+12. **Update the report file.** For each numbered finding in the report, prepend a status marker to the line:
     - `~~` strikethrough for fixed items — wrap the entire line content: `1. ~~**Line 45** — …~~`
     - No change for skipped items — leave as-is.
-11. **Update the Summary table.** Recount all remaining (non-strikethrough) findings in the report and update the `| Category | Count |` table under `## Summary`:
+13. **Update the Summary table.** Recount all remaining (non-strikethrough) findings in the report and update the `| Category | Count |` table under `## Summary`:
     - Decrement the count for each category that had a finding fixed. Convention findings are split by severity (`Convention [High]`, `Convention [Medium]`, `Convention [Low]`), so update the correct severity row.
     - Recalculate the **Total** row if present.
     - Keep the existing category rows and table structure — do not add or remove rows.
