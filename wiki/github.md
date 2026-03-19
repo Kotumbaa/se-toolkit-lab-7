@@ -520,7 +520,8 @@ ls .
 ### `fatal: destination path <directory-path> already exists and is not an empty directory.`
 
 There is already a possibly outdated version of the [`GitHub` repository](./github.md#github-repository).
-You can remove it.
+
+Option 1: Remove it.
 
 1. To remove the directory at `<directory-path>`,
 
@@ -533,3 +534,17 @@ You can remove it.
    Replace the placeholder [`<directory-path>`](./file-system.md#directory-path-placeholder) with the path from the error message (without `<` and `>`).
 
 2. Clone again.
+
+Option 2: Update the `<branch>`.
+
+1. To enter the directory at `<directory-path>`,
+
+   [run in the `VS Code Terminal`](./vs-code.md#run-a-command-in-the-vs-code-terminal)
+
+   ```terminal
+   cd <directory-path>
+   ```
+
+   Replace the placeholder [`<directory-path>`](./file-system.md#directory-path-placeholder) with the path from the error message (without `<` and `>`).
+
+2. [Hard reset the `<branch>`](./git-vscode.md#hard-reset-the-branch).
