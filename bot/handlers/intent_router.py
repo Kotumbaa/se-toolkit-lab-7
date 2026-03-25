@@ -213,56 +213,55 @@ def normalize_lab_id(lab_input: str) -> str:
 
 def create_tools_registry(lms_client: LMSAPIClient) -> dict[str, callable]:
     """Create a registry of tool functions."""
-    
+
     def get_items() -> list[dict]:
         return lms_client.get_items()
-    
+
     def get_learners() -> list[dict]:
-        return lms_client.get_items()  # Using items as placeholder
-    
+        return lms_client.get_learners()
+
     def get_scores(lab: str) -> list[dict]:
         lab = normalize_lab_id(lab)
-        # Note: This endpoint may not exist, using pass_rates as fallback
-        return lms_client.get_pass_rates(lab)
-    
+        return lms_client.get_scores(lab)
+
     def get_pass_rates(lab: str) -> list[dict]:
         lab = normalize_lab_id(lab)
         return lms_client.get_pass_rates(lab)
-    
+
     def get_timeline(lab: str) -> list[dict]:
         lab = normalize_lab_id(lab)
         try:
             return lms_client.get_timeline(lab)
         except Exception:
             return []
-    
+
     def get_groups(lab: str) -> list[dict]:
         lab = normalize_lab_id(lab)
         try:
             return lms_client.get_groups(lab)
         except Exception:
             return []
-    
+
     def get_top_learners(lab: str, limit: int = 5) -> list[dict]:
         lab = normalize_lab_id(lab)
         try:
             return lms_client.get_top_learners(lab, limit)
         except Exception:
             return []
-    
+
     def get_completion_rate(lab: str) -> dict:
         lab = normalize_lab_id(lab)
         try:
             return lms_client.get_completion_rate(lab)
         except Exception:
             return {}
-    
+
     def trigger_sync() -> dict:
         try:
             return lms_client.trigger_sync()
         except Exception:
             return {"error": "Sync failed"}
-    
+
     return {
         "get_items": get_items,
         "get_learners": get_learners,

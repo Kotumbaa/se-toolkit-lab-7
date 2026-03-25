@@ -42,6 +42,23 @@ class LMSAPIClient:
         response.raise_for_status()
         return response.json()
 
+    def get_learners(self) -> list[dict[str, Any]]:
+        """Fetch enrolled learners and their groups."""
+        client = self._get_client()
+        response = client.get(f"{self.base_url}/learners/")
+        response.raise_for_status()
+        return response.json()
+
+    def get_scores(self, lab: str) -> list[dict[str, Any]]:
+        """Fetch score distribution for a specific lab."""
+        client = self._get_client()
+        response = client.get(
+            f"{self.base_url}/analytics/scores",
+            params={"lab": lab},
+        )
+        response.raise_for_status()
+        return response.json()
+
     def get_pass_rates(self, lab: str) -> list[dict[str, Any]]:
         """Fetch pass rates for a specific lab."""
         client = self._get_client()
