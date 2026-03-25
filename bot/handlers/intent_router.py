@@ -190,24 +190,23 @@ TOOL_SCHEMAS = [
 def normalize_lab_id(lab_input: str) -> str:
     """Normalize lab ID to format 'lab-XX'."""
     lab_input = lab_input.lower().strip()
-    
+
     # Already in correct format
     if lab_input.startswith("lab-"):
         return lab_input
-    
-    # Format like "lab 4" or "lab04" or "4"
-    import re
-    match = re.search(r"lab[\s-]?(\d+)", lab_input)
-    if match:
-        num = int(match.group(1))
-        return f"lab-0{num}" if num < 10 else f"lab-{num}"
-    
-    # Just a number
-    match = re.match(r"(\d+)", lab_input)
-    if match:
-        num = int(match.group(1))
-        return f"lab-0{num}" if num < 10 else f"lab-{num}"
-    
+
+    compact = lab_input.replace(" ", "").replace("-", "")
+    if compact.startswith("lab"):
+        digits = "".join(char for char in compact[3:] if char.isdigit())
+        if digits:
+            num = int(digits)
+            return f"lab-{num:02d}"
+
+    digits_only = "".join(char for char in lab_input if char.isdigit())
+    if digits_only:
+        num = int(digits_only)
+        return f"lab-{num:02d}"
+
     return lab_input
 
 
