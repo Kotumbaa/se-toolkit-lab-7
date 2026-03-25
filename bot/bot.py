@@ -9,6 +9,7 @@ Usage:
 import argparse
 import sys
 
+from config import load_config
 from handlers import (
     handle_start,
     handle_help,
@@ -16,6 +17,9 @@ from handlers import (
     handle_labs,
     handle_scores,
 )
+
+# Load environment variables from .env.bot.secret
+load_config()
 
 
 def handle_message(message: str) -> str:
