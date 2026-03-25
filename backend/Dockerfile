@@ -19,10 +19,15 @@ ENV UV_NO_DEV=1
 ENV UV_PYTHON_DOWNLOADS=0
 
 WORKDIR /app
+
+# Copy bot README and other files before uv sync
+COPY bot /app/bot
+
 RUN --mount=type=cache,target=/root/.cache/uv \
     --mount=type=bind,source=uv.lock,target=uv.lock \
     --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
     --mount=type=bind,source=backend/pyproject.toml,target=backend/pyproject.toml \
+    --mount=type=bind,source=bot/pyproject.toml,target=bot/pyproject.toml \
     uv sync --locked --no-install-project
 
 COPY backend /app/backend
