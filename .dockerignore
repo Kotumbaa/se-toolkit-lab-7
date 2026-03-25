@@ -23,4 +23,8 @@ docs/
 docker-compose.yml
 Dockerfile
 
+# Allow bot README
+!bot/README.md
+
+# Block other markdown
 *.md

@@ -5,7 +5,7 @@ requires-python = "==3.14.2"
 [manifest]
 members = [
     "lms-backend",
-    "lms-bot",
+    "lms-telegram-bot",
 ]
 
 [manifest.dependency-groups]
@@ -408,20 +408,24 @@ dev = [
 ]
 
 [[package]]
-name = "lms-bot"
+name = "lms-telegram-bot"
 version = "0.1.0"
-source = { virtual = "bot" }
+source = { editable = "bot" }
 dependencies = [
     { name = "aiogram" },
     { name = "httpx" },
+    { name = "pydantic" },
     { name = "pydantic-settings" },
+    { name = "python-dotenv" },
 ]
 
 [package.metadata]
 requires-dist = [
-    { name = "aiogram", specifier = ">=3.20" },
-    { name = "httpx", specifier = "==0.28.1" },
-    { name = "pydantic-settings", specifier = "==2.12.0" },
+    { name = "aiogram", specifier = ">=3.0.0" },
+    { name = "httpx", specifier = ">=0.27.0" },
+    { name = "pydantic", specifier = ">=2.0.0" },
+    { name = "pydantic-settings", specifier = ">=2.0.0" },
+    { name = "python-dotenv", specifier = ">=1.0.0" },
 ]
 
 [[package]]
