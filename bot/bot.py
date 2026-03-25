@@ -4,6 +4,7 @@ Telegram bot entry point with --test mode support.
 Usage:
     uv run bot.py              # Start Telegram bot
     uv run bot.py --test "/command"  # Test mode (no Telegram connection)
+    uv run bot.py --test "question"  # Natural language query via LLM
 """
 
 import argparse
@@ -17,13 +18,15 @@ from handlers import (
     handle_labs,
     handle_scores,
 )
+from handlers.intent_router import route as route_intent
 
 # Load environment variables from .env.bot.secret
 load_config()
 
 
 def handle_message(message: str) -> str:
-    """Route message to appropriate handler."""
+    """Route message to appropriate handler or LLM intent router."""
+    # Slash commands go to specific handlers
     if message.startswith("/start"):
         return handle_start(message[7:].strip())
     elif message.startswith("/help"):
@@ -35,7 +38,8 @@ def handle_message(message: str) -> str:
     elif message.startswith("/scores"):
         return handle_scores(message[8:].strip())
     else:
-        return "Unknown command. Use /help to see available commands."
+        # Natural language queries go through LLM intent router
+        return route_intent(message)
 
 
 def main():

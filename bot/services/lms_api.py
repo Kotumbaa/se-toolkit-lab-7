@@ -56,3 +56,50 @@ class LMSAPIClient:
         """Check if backend is healthy by fetching items count."""
         items = self.get_items()
         return {"healthy": True, "items_count": len(items)}
+
+    def get_timeline(self, lab: str) -> list[dict[str, Any]]:
+        """Fetch timeline data for a specific lab."""
+        client = self._get_client()
+        response = client.get(
+            f"{self.base_url}/analytics/timeline",
+            params={"lab": lab},
+        )
+        response.raise_for_status()
+        return response.json()
+
+    def get_groups(self, lab: str) -> list[dict[str, Any]]:
+        """Fetch group data for a specific lab."""
+        client = self._get_client()
+        response = client.get(
+            f"{self.base_url}/analytics/groups",
+            params={"lab": lab},
+        )
+        response.raise_for_status()
+        return response.json()
+
+    def get_top_learners(self, lab: str, limit: int = 5) -> list[dict[str, Any]]:
+        """Fetch top learners for a specific lab."""
+        client = self._get_client()
+        response = client.get(
+            f"{self.base_url}/analytics/top-learners",
+            params={"lab": lab, "limit": limit},
+        )
+        response.raise_for_status()
+        return response.json()
+
+    def get_completion_rate(self, lab: str) -> dict[str, Any]:
+        """Fetch completion rate for a specific lab."""
+        client = self._get_client()
+        response = client.get(
+            f"{self.base_url}/analytics/completion-rate",
+            params={"lab": lab},
+        )
+        response.raise_for_status()
+        return response.json()
+
+    def trigger_sync(self) -> dict[str, Any]:
+        """Trigger data sync from autochecker."""
+        client = self._get_client()
+        response = client.post(f"{self.base_url}/pipeline/sync", json={})
+        response.raise_for_status()
+        return response.json()
